@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="FB_Stage_Motion" Id="{77f85c13-a800-4666-90b8-ad8bffa3e1c4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Stage_Motion
+VAR_INPUT
+
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+		// stepper function blocks  
+	mcPower_1 : MC_Power;
+	mcReset_1 : MC_Reset;
+	mcJogging_1 : MC_Jog;
+	mcMoveAbs_1 : MC_MoveAbsolute;
+	mcMoveRel_1 : MC_MoveRelative;
+	
+	bEnableAxis_1 : BOOL;
+	bJogForwards : BOOL;
+	eJogMode : E_JogMode; 
+	bMoveDone : BOOL;	
+	bAbsMove: BOOL;
+	fAbsPos_1: LREAL;
+	bRelMove: BOOL;
+	fRelDistance: LREAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[mcPower_1(Axis := GVL.stAxis_1, Enable := bEnableAxis_1, Enable_Positive := TRUE, Enable_Negative := TRUE, Override := 100.0);
+
+mcReset_1(Axis := GVL.stAxis_1, Execute := NOT(bEnableAxis_1));
+
+mcJogging_1(Axis := GVL.stAxis_1, JogForward := bJogForwards, Mode := MC_JOGMODE_INCHING, Position := 360.0, Velocity := 1.0, Acceleration := 1.0, Deceleration := 1.0, Jerk := 0.8);
+
+mcMoveAbs_1 (Axis := GVL.stAxis_1, Execute := bAbsMove, Position := fAbsPos_1, Velocity := 1);
+
+mcMoveRel_1(Axis := GVL.stAxis_1, Execute := bRelMove, Distance := fRelDistance, Velocity :=1);
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_Stage_Motion">
+      <LineId Id="17" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="48" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
