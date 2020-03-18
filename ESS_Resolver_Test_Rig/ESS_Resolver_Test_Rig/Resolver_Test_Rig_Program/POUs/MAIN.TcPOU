@@ -197,6 +197,11 @@ ELSE
 END_CASE]]></ST>
       </Implementation>
     </Action>
+    <Action Name="Thermo_Couple" Id="{6678029e-6d8f-4c39-9a51-29de60c369fe}">
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Action>
     <LineIds Name="MAIN">
       <LineId Id="185" Count="0" />
       <LineId Id="260" Count="0" />
@@ -276,6 +281,9 @@ END_CASE]]></ST>
       <LineId Id="40" Count="1" />
       <LineId Id="37" Count="0" />
       <LineId Id="11" Count="1" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.Thermo_Couple">
       <LineId Id="1" Count="0" />
     </LineIds>
   </POU>
