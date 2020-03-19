@@ -1,5 +1,6 @@
 ESS_Resolver_Test_Rig/.vs/
 *.bak
+<<<<<<< HEAD
 *.pyc
 *.suo
 *.tmc
@@ -14,4 +15,34 @@ _Boot/
 _CompileInfo/
 _Libraries/
 logs.0*
+=======
+
+*.pyc
+
+*.suo
+
+*.tmc
+
+*.tpy
+
+*.~u
+
+*~
+.#
+*
+.epics.
+*
+UpgradeLog.htm
+
+\#*#
+
+_Boot/
+
+_CompileInfo/
+
+_Libraries/
+
+logs.0*
+
+>>>>>>> fixedBranch
 solution/TrialLicense.tclrs
