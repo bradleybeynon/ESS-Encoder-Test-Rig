@@ -21,11 +21,6 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"482"</v>
-              <v n="TextDefault">"%.0f °C"</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
               <v n="TextID">"934"</v>
               <v n="TextDefault">"%.1f mm/s"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -48,11 +43,6 @@
             <o>
               <v n="TextID">"618"</v>
               <v n="TextDefault">"%.2f mm"</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"133"</v>
-              <v n="TextDefault">"%.2f °C"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -226,16 +216,6 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"331"</v>
-              <v n="TextDefault">"Max Temp Cut Off"</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"781"</v>
-              <v n="TextDefault">"Motor Temp"</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
               <v n="TextID">"410"</v>
               <v n="TextDefault">"Move Absolute"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -293,26 +273,6 @@
             <o>
               <v n="TextID">"603"</v>
               <v n="TextDefault">"STOP"</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"953"</v>
-              <v n="TextDefault">"Temp Ch1"</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"988"</v>
-              <v n="TextDefault">"Temp Ch2"</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"411"</v>
-              <v n="TextDefault">"Temp Ch3"</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"916"</v>
-              <v n="TextDefault">"Temp Ch4"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
