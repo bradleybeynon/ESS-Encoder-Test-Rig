@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <TcLicenseInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2011/11/TcLicenseInfo">
 	<LicenseInfo>
-		<SystemId>{1B81C609-908C-FC1B-D7A6-0594A97507F8}</SystemId>
-		<IssueTime>2019-11-22T15:24:00</IssueTime>
-		<ExpireTime>2019-11-30T00:00:00</ExpireTime>
-		<LicenseKey>9b99654648d3a943bc43bd620a8d733cee4264555f51f6e5692f99fe92c17a158be8cb13fc803ea872d55a0c2ddeb830d0851a7daabac88314d2dfe28728ba049b4f46fc5ca814f55e4d6cf85815af758629930b65e03846f007310ef48bdd86156140df6677301b99fddd06056ed7f3aaef6cdfbc8d6ae2eb9c00d2299a1bb00098bdee85575f36ba001d41d31f932457e998c16f3d53ac6fcae46f291cbacf756870eaa22898f65a5dffc9716e1b99936c7ff38da7d9f072e187b1ef224a5ee0dc8750f4787dfe6c40cb54aca6e54f6b7e1d673e5ef554bd69ce84d0f8cd35ca12da1ab914ec3902c4adad9e431daff9f4f2f92854c0c767332b4d6b2e2bcc</LicenseKey>
+		<SystemId>{97E5E12A-934A-91AF-B0EE-729EFF1FA0B5}</SystemId>
+		<IssueTime>2020-03-19T10:51:00</IssueTime>
+		<ExpireTime>2020-03-27T00:00:00</ExpireTime>
+		<LicenseKey>0f3ca47e8a0ca9d0b923316af28ed7c07113679487e2d954624f7ae8bb99db4c8a59fcc00a7d0b2bba531e049ff20dd0f23dbd4d2081aad13c5d1190b796ece478caf51afd0785acb8f347496264b3978178ba5b5abca4631b76ffb7a83647e67defe398697fb07757b2c2137a4914e752027dcd5089bb78f195b166b903df2837a05189990f8d6992aaee00ed9d9ff3b4bfe2a6027c0e7d692ba24de97cea4a79950b52a6e1ab7d251cd3fdc96d216b2534ca102b2adac324081f944266cb5d6978d116af746e8237374bb0d50ec3be1e8c66bbd2ffbdc0a15cc0f3498a17ea4409a1e49601242cdfa59bf544f8c5d2da8cb9933241cfece53783eddc40d3f0</LicenseKey>
 		<License>
 			<LicenseId>{4C256767-E6E6-4AF5-BD68-9F7ABAD0C200}</LicenseId>
 			<Name>TC3 ADS</Name>
@@ -29,6 +29,16 @@
 			<LicenseId>{520DE751-9DB6-47CB-8240-BD5C466E7E64}</LicenseId>
 			<Name>TC3 NC PTP</Name>
 			<OrderNo>TF5000</OrderNo>
+		</License>
+		<License>
+			<LicenseId>{777F1598-583B-4503-99BB-7C02E0ABD97E}</LicenseId>
+			<Name>TC3 Controller Toolbox</Name>
+			<OrderNo>TF4100</OrderNo>
+		</License>
+		<License>
+			<LicenseId>{1EEBBAAA-51E1-4750-9D6A-7B04116EA32B}</LicenseId>
+			<Name>TC3 Temperature-Controller</Name>
+			<OrderNo>TF4110</OrderNo>
 		</License>
 	</LicenseInfo>
 </TcLicenseInfo>
