@@ -68,7 +68,10 @@ VAR_INPUT
 	LimitSwitchInput_2 AT %I* : BOOL;
 	
 // Analouge Inputs
-	ThermoCoupleValue_Ch1 AT %I* : DINT;  
+ThermoCoupleValue_Ch1 AT %I* : DINT; 
+ThermoCoupleValue_Ch2 AT %I* : DINT; 
+ThermoCoupleValue_Ch3 AT %I* : DINT; 
+ThermoCoupleValue_Ch4 AT %I* : DINT;  
 END_VAR
 
 VAR_OUTPUT
@@ -205,12 +208,17 @@ END_CASE]]></ST>
     <Action Name="Thermo_Couple" Id="{6678029e-6d8f-4c39-9a51-29de60c369fe}">
       <Implementation>
         <ST><![CDATA[	IF ThermoCoupleValue_Ch1 >= fTempLimit THEN
-		mcstop.Execute := TRUE; 
-	ELSE
-		mcstop.Execute := FALSE; 
+		bEnableAxis_1 := FALSE; 
 	END_IF
-	
-	]]></ST>
+	IF ThermoCoupleValue_Ch2 >= fTempLimit THEN
+		bEnableAxis_1 := FALSE; 
+	END_IF	
+	IF ThermoCoupleValue_Ch3 >= fTempLimit THEN
+		bEnableAxis_1 := FALSE; 
+	END_IF	
+	IF ThermoCoupleValue_Ch4 >= fTempLimit THEN
+		bEnableAxis_1 := FALSE; 
+	END_IF]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="MAIN">
@@ -297,9 +305,13 @@ END_CASE]]></ST>
     </LineIds>
     <LineIds Name="MAIN.Thermo_Couple">
       <LineId Id="1" Count="1" />
-      <LineId Id="4" Count="1" />
-      <LineId Id="3" Count="0" />
-      <LineId Id="6" Count="1" />
+      <LineId Id="4" Count="0" />
+      <LineId Id="8" Count="1" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="12" Count="1" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="15" Count="1" />
+      <LineId Id="14" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
