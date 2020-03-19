@@ -42,7 +42,6 @@ VAR
 	bTestFinished : BOOL;
 	bTestRelMove: BOOL;
 	
-
 	bEnableAxisPosative_1: BOOL;
 	bEnableAxisNegative_1: BOOL;
 END_VAR
@@ -55,16 +54,21 @@ VAR_INPUT
 	fHomePosition: LREAL;
 	fAxisVelocity: LREAL;
 	fAxisAcceleration: LREAL;
-	// action Variables
-	iCycleCount : WORD;
-	fReturnTime: TIME;
-	uInputReurnTime :UINT;
-	fDutyCycleTime: TIME;
-	uInputCycleTime :UINT;
 	
-			// Digital Inputs
+// action Variables
+	iCycleCount : WORD;
+	fReturnTime : TIME;
+	uInputReurnTime : UINT;
+	fDutyCycleTime : TIME;
+	uInputCycleTime : UINT;
+	fTempLimit : DINT;
+	
+// Digital Inputs
 	LimitSwitchInput_1 AT %I* : BOOL;
 	LimitSwitchInput_2 AT %I* : BOOL;
+	
+// Analouge Inputs
+	ThermoCoupleValue_Ch1 AT %I* : DINT;  
 END_VAR
 
 VAR_OUTPUT
@@ -80,6 +84,7 @@ END_VAR]]></Declaration>
       <ST><![CDATA[heartbeat := heartbeat + 1;
 
 Limit_Switch();
+Thermo_Couple();
 EncoderPowerOutput_3 := TRUE;
 EncoderPowerOutput_6 := TRUE;
 
@@ -199,13 +204,20 @@ END_CASE]]></ST>
     </Action>
     <Action Name="Thermo_Couple" Id="{6678029e-6d8f-4c39-9a51-29de60c369fe}">
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[	IF ThermoCoupleValue_Ch1 >= fTempLimit THEN
+		mcstop.Execute := TRUE; 
+	ELSE
+		mcstop.Execute := FALSE; 
+	END_IF
+	
+	]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="MAIN">
       <LineId Id="185" Count="0" />
       <LineId Id="260" Count="0" />
       <LineId Id="262" Count="0" />
+      <LineId Id="418" Count="0" />
       <LineId Id="259" Count="0" />
       <LineId Id="337" Count="1" />
       <LineId Id="84" Count="1" />
@@ -284,7 +296,10 @@ END_CASE]]></ST>
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="MAIN.Thermo_Couple">
-      <LineId Id="1" Count="0" />
+      <LineId Id="1" Count="1" />
+      <LineId Id="4" Count="1" />
+      <LineId Id="3" Count="0" />
+      <LineId Id="6" Count="1" />
     </LineIds>
   </POU>
 </TcPlcObject>
