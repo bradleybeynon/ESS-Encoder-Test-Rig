@@ -42,6 +42,7 @@ VAR
 	bTestFinished : BOOL;
 	bTestRelMove: BOOL;
 	
+
 	bEnableAxisPosative_1: BOOL;
 	bEnableAxisNegative_1: BOOL;
 END_VAR
@@ -54,24 +55,16 @@ VAR_INPUT
 	fHomePosition: LREAL;
 	fAxisVelocity: LREAL;
 	fAxisAcceleration: LREAL;
-	
-// action Variables
+	// action Variables
 	iCycleCount : WORD;
-	fReturnTime : TIME;
-	uInputReurnTime : UINT;
-	fDutyCycleTime : TIME;
-	uInputCycleTime : UINT;
-	fTempLimit : DINT;
+	fReturnTime: TIME;
+	uInputReurnTime :UINT;
+	fDutyCycleTime: TIME;
+	uInputCycleTime :UINT;
 	
-// Digital Inputs
+			// Digital Inputs
 	LimitSwitchInput_1 AT %I* : BOOL;
 	LimitSwitchInput_2 AT %I* : BOOL;
-	
-// Analouge Inputs
-ThermoCoupleValue_Ch1 AT %I* : DINT; 
-ThermoCoupleValue_Ch2 AT %I* : DINT; 
-ThermoCoupleValue_Ch3 AT %I* : DINT; 
-ThermoCoupleValue_Ch4 AT %I* : DINT;  
 END_VAR
 
 VAR_OUTPUT
@@ -87,7 +80,6 @@ END_VAR]]></Declaration>
       <ST><![CDATA[heartbeat := heartbeat + 1;
 
 Limit_Switch();
-Thermo_Couple();
 EncoderPowerOutput_3 := TRUE;
 EncoderPowerOutput_6 := TRUE;
 
@@ -205,27 +197,10 @@ ELSE
 END_CASE]]></ST>
       </Implementation>
     </Action>
-    <Action Name="Thermo_Couple" Id="{6678029e-6d8f-4c39-9a51-29de60c369fe}">
-      <Implementation>
-        <ST><![CDATA[	IF ThermoCoupleValue_Ch1 >= fTempLimit THEN
-		bEnableAxis_1 := FALSE; 
-	END_IF
-	IF ThermoCoupleValue_Ch2 >= fTempLimit THEN
-		bEnableAxis_1 := FALSE; 
-	END_IF	
-	IF ThermoCoupleValue_Ch3 >= fTempLimit THEN
-		bEnableAxis_1 := FALSE; 
-	END_IF	
-	IF ThermoCoupleValue_Ch4 >= fTempLimit THEN
-		bEnableAxis_1 := FALSE; 
-	END_IF]]></ST>
-      </Implementation>
-    </Action>
     <LineIds Name="MAIN">
       <LineId Id="185" Count="0" />
       <LineId Id="260" Count="0" />
       <LineId Id="262" Count="0" />
-      <LineId Id="418" Count="0" />
       <LineId Id="259" Count="0" />
       <LineId Id="337" Count="1" />
       <LineId Id="84" Count="1" />
@@ -302,16 +277,6 @@ END_CASE]]></ST>
       <LineId Id="37" Count="0" />
       <LineId Id="11" Count="1" />
       <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="MAIN.Thermo_Couple">
-      <LineId Id="1" Count="1" />
-      <LineId Id="4" Count="0" />
-      <LineId Id="8" Count="1" />
-      <LineId Id="6" Count="0" />
-      <LineId Id="12" Count="1" />
-      <LineId Id="7" Count="0" />
-      <LineId Id="15" Count="1" />
-      <LineId Id="14" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
