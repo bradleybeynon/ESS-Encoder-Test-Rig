@@ -658,7 +658,7 @@
                 <v n="VisualElementIdentifier">"Jog_Forward_Button"</v>
                 <n n="VisualElementOfflinePaintCommands" />
                 <n n="VisualElementFrameInformation" />
-                <d n="VisualElementInputActions" t="Hashtable" ckt="String" cvt="IInputAction[]">
+                <d n="VisualElementInputActions" t="Hashtable" ckt="String">
                   <v>OnMouseDown</v>
                   <a cet="ToggleVarInputAction">
                     <o>
@@ -1221,7 +1221,7 @@
                 <v n="VisualElementIdentifier">"GenElemInst_14"</v>
                 <n n="VisualElementOfflinePaintCommands" />
                 <n n="VisualElementFrameInformation" />
-                <d n="VisualElementInputActions" t="Hashtable" ckt="String" cvt="IInputAction[]">
+                <d n="VisualElementInputActions" t="Hashtable" ckt="String">
                   <v>OnMouseDown</v>
                   <a cet="ToggleVarInputAction">
                     <o>
@@ -1782,7 +1782,7 @@
                 <v n="VisualElementIdentifier">"GenElemInst_22"</v>
                 <n n="VisualElementOfflinePaintCommands" />
                 <n n="VisualElementFrameInformation" />
-                <d n="VisualElementInputActions" t="Hashtable" ckt="String" cvt="IInputAction[]">
+                <d n="VisualElementInputActions" t="Hashtable" ckt="String" cvt="InputBoxInputAction[]">
                   <v>OnMouseClick</v>
                   <a cet="InputBoxInputAction">
                     <o>
@@ -1793,7 +1793,7 @@
                       <v n="InputBoxDialogTitle">""</v>
                       <v n="Password">false</v>
                       <v n="UseTextOutputVariable">true</v>
-                      <v n="TextOutputVariableInitialized">false</v>
+                      <v n="TextOutputVariableInitialized">true</v>
                       <v n="OtherVarConversion">""</v>
                       <v n="Format">"Relative Move Distance"</v>
                       <v n="DialogPosition" t="DialogPositionSetting">UseGlobalSetting</v>
@@ -2246,7 +2246,7 @@
                 <v n="VisualElementIdentifier">"GenElemInst_34"</v>
                 <n n="VisualElementOfflinePaintCommands" />
                 <n n="VisualElementFrameInformation" />
-                <d n="VisualElementInputActions" t="Hashtable" ckt="String" cvt="IInputAction[]">
+                <d n="VisualElementInputActions" t="Hashtable" ckt="String" cvt="InputBoxInputAction[]">
                   <v>OnMouseClick</v>
                   <a cet="InputBoxInputAction">
                     <o>
@@ -2634,8 +2634,8 @@
                 <v>daeeeaec-7e98-498c-adc4-1f3b84c47180</v>
                 <v>ContainsPoint</v>
                 <v>514e33c8-d3ce-4721-9877-7a94e5b2e9bb</v>
-                <v>HasInputAccess</v>
-                <v>90855b1d-981c-4e8d-9090-650430567a86</v>
+                <v>SetStaticState</v>
+                <v>03881873-6a3a-41d7-996d-5d55c38bcab6</v>
                 <v>HasInputAccessIntern</v>
                 <v>b071e9db-5bde-4d06-8042-82714a5f3799</v>
                 <v>GetTooltip</v>
@@ -2654,8 +2654,6 @@
                 <v>75070d53-c04b-42bb-b354-0624bfbce1f7</v>
                 <v>SetClientData</v>
                 <v>c6188090-9043-42b3-8716-800fc4bcabfc</v>
-                <v>HasVisibilityAccessIntern</v>
-                <v>2e426bf0-08c8-4dd3-bfa7-be3e03c6ea86</v>
                 <v>GetInstance</v>
                 <v>de1ddac5-9950-4b74-b289-ac8232f86054</v>
                 <v>GetClientData</v>
@@ -2674,12 +2672,14 @@
                 <v>5698e8a6-b17d-4c03-8773-3a430052bb2f</v>
                 <v>Initialize</v>
                 <v>ed9eb039-508f-4326-93e4-b3bdfc4edd72</v>
-                <v>Destruct</v>
-                <v>fe1097ca-b8ce-4bfd-8a33-cbea62f4021e</v>
-                <v>SetStaticState</v>
-                <v>03881873-6a3a-41d7-996d-5d55c38bcab6</v>
+                <v>HasInputAccess</v>
+                <v>90855b1d-981c-4e8d-9090-650430567a86</v>
+                <v>HasVisibilityAccessIntern</v>
+                <v>2e426bf0-08c8-4dd3-bfa7-be3e03c6ea86</v>
                 <v>GetSurroundingRect</v>
                 <v>7051fcc0-b5af-43a2-b221-587bc0516c76</v>
+                <v>ElementInfo</v>
+                <v>a452b071-edd1-40fc-99be-758e696f3dab</v>
                 <v>GetResult</v>
                 <v>65b94ce7-76fd-4d36-9a27-ce5691d59db7</v>
                 <v>GetLocalUsergroup</v>
@@ -2702,8 +2702,8 @@
                 <v>9ce8b4cf-3a7a-46d3-bf4e-0480c7db61e1</v>
                 <v>HandleInput</v>
                 <v>9de394a8-3b13-46f0-a3e2-3b8357fcac51</v>
-                <v>ElementInfo</v>
-                <v>a452b071-edd1-40fc-99be-758e696f3dab</v>
+                <v>Destruct</v>
+                <v>fe1097ca-b8ce-4bfd-8a33-cbea62f4021e</v>
               </d>
               <v n="FbName">"NotImportant"</v>
               <v n="FbGuid">{42bf85bb-a55c-43f2-b75e-c1688e11f525}</v>
@@ -2716,10 +2716,10 @@
               <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
                 <v>FB_Init</v>
                 <v>9e397b0f-ea95-48ab-bb51-6dd53686d4fd</v>
-                <v>FB_Reinit</v>
-                <v>7adfc817-e8f4-4aa3-92f2-ad609686bbbe</v>
                 <v>FB_Exit</v>
                 <v>89465fc0-4880-46e7-9e7d-19d0a6e324e3</v>
+                <v>FB_Reinit</v>
+                <v>7adfc817-e8f4-4aa3-92f2-ad609686bbbe</v>
               </d>
               <v n="FbName">"NotImportant"</v>
               <v n="FbGuid">{0e14f7cd-45ea-4817-8d21-bf873ada44ed}</v>
@@ -2816,6 +2816,7 @@
         <Type n="IInputAction">{69265815-ba9d-4bec-bfcb-427fb9172844}</Type>
         <Type n="IInputAction[]">_3S.CoDeSys.VisualElem.IInputAction[], VisualElem, Version=3.5.13.0, Culture=neutral, PublicKeyToken=null</Type>
         <Type n="InputBoxInputAction">{e8e7e747-f76f-4dee-ab1c-b9637e41ac26}</Type>
+        <Type n="InputBoxInputAction[]">_3S.CoDeSys.VisualElem.InputBoxInputAction[], VisualElem.plugin, Version=3.5.13.30, Culture=neutral, PublicKeyToken=null</Type>
         <Type n="Int16">System.Int16</Type>
         <Type n="Int32">System.Int32</Type>
         <Type n="Int64">System.Int64</Type>
@@ -2826,6 +2827,7 @@
         <Type n="TextDocument">{f3878285-8e4f-490b-bb1b-9acbb7eb04db}</Type>
         <Type n="TextLine">{a5de0b0b-1cb5-4913-ac21-9d70293ec00d}</Type>
         <Type n="ToggleVarInputAction">{9dcc475d-e53e-4dd3-abd9-995bf52d466f}</Type>
+        <Type n="ToggleVarInputAction[]">_3S.CoDeSys.VisualElem.ToggleVarInputAction[], VisualElem.plugin, Version=3.5.13.30, Culture=neutral, PublicKeyToken=null</Type>
         <Type n="UInt16">System.UInt16</Type>
         <Type n="UInt32">System.UInt32</Type>
         <Type n="VisualElemCollection">{ef9d0b20-c96e-48db-b361-2ded4063150e}</Type>
