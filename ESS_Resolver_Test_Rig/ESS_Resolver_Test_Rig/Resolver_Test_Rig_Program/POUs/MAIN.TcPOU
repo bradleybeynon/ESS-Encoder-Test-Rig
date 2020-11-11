@@ -58,13 +58,16 @@ VAR_INPUT
 	// action Variables
 	iCycleCount : WORD;
 	fReturnTime: TIME;
-	uInputReurnTime :UINT;
+	uInputReurnTime :UDINT;
 	fDutyCycleTime: TIME;
-	uInputCycleTime :UINT;
+	uInputCycleTime :UDINT;
 	
 			// Digital Inputs
 	LimitSwitchInput_1 AT %I* : BOOL;
 	LimitSwitchInput_2 AT %I* : BOOL;
+			// Analogue inputs
+	ThermoCoupleChanne_1 AT %I*: REAL;
+	ThermoCoupleChanne_2 AT %I*: REAL;
 END_VAR
 
 VAR_OUTPUT
@@ -135,8 +138,8 @@ mcMoveAbsTestReturn_1.Execute := FALSE;
 fbReturnTimer( IN := bStartReturnTimer, PT := fReturnTime);	
 fbDutyCycleTimer( IN := bStartDutyCycleTimer, PT := fDutyCycleTime);	
 fbTestCycleCounter(CU := bCycleComplete, RESET := bCycleCounterReset, PV := iCycleCount);
-fReturnTime:= INT_TO_TIME(uInputReurnTime);
-fDutyCycleTime:= INT_TO_TIME(uInputCycleTime);
+fReturnTime:= UDINT_TO_TIME(uInputReurnTime);
+fDutyCycleTime:= UDINT_TO_TIME(uInputCycleTime);
 CASE iState OF
 	
 	// initialising the state machine so starting a homing rotuine reseting the counter to 0 
@@ -195,6 +198,22 @@ CASE iState OF
 ELSE
 	;
 END_CASE]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="Thermo_Couple" Id="{3a8aed03-d895-41ec-a963-8fc2b1e6ee52}">
+      <Implementation>
+        <ST><![CDATA[IF ThermoCoupleChanne_1 > 40 THEN
+	bEnableAxis_1 := FALSE ;
+		
+	
+END_IF
+
+IF ThermoCoupleChanne_2 > 40 THEN
+	bEnableAxis_1 := FALSE ;
+		
+	
+END_IF
+]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="MAIN">
@@ -277,6 +296,15 @@ END_CASE]]></ST>
       <LineId Id="37" Count="0" />
       <LineId Id="11" Count="1" />
       <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.Thermo_Couple">
+      <LineId Id="1" Count="0" />
+      <LineId Id="4" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="2" Count="1" />
+      <LineId Id="10" Count="4" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="15" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
