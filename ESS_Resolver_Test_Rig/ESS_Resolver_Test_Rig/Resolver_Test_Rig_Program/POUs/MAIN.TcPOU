@@ -42,6 +42,11 @@ VAR
 	bTestFinished : BOOL;
 	bTestRelMove: BOOL;
 	
+// ENCODER CSV variables
+	EncoderCSVData: ST_EncoderCSVData; 
+//Unixtime stuff
+    unixTime: UnixTimestamp;
+    timestampMilliseconds         : ULINT;	
 
 	bEnableAxisPosative_1: BOOL;
 	bEnableAxisNegative_1: BOOL;
@@ -106,6 +111,21 @@ bRelMove := FALSE;
 
 Test_Routine();
 
+// start of CSV data collection
+EncoderCSVData.AxisPosition := GVL.stAxis_1.NcToPlc.ActPos ;
+EncoderCSVData.CurrentCycle := iCycleCount ;
+EncoderCSVData.PositalPosition := GVL.stAxis_2.NcToPlc.ActPos ;
+EncoderCSVData.KublerPosition := GVL.stAxis_3.NcToPlc.ActPos ;
+EncoderCSVData.AMOPosition := GVL.stAxis_4.NcToPlc.ActPos ;
+EncoderCSVData.ThermoCouple[0] := ThermoCoupleChannel_1 ;
+EncoderCSVData.ThermoCouple[1] := ThermoCoupleChannel_2 ;
+EncoderCSVData.ThermoCouple[2] := ThermoCoupleChannel_3 ;
+EncoderCSVData.ThermoCouple[3] := ThermoCoupleChannel_4 ;
+
+unixTime();
+EncoderCSVData.UnixTime := unixTime.milliseconds;
+P_CSVWriter.stimeString := unixTime.timeString;
+P_CSVWriter.testEncoderData := EncoderCSVData;
 P_CSVWriter(     bNewData            :=    TRUE); 
 ]]></ST>
     </Implementation>
@@ -235,7 +255,19 @@ END_IF
       <LineId Id="70" Count="0" />
       <LineId Id="184" Count="0" />
       <LineId Id="125" Count="0" />
+      <LineId Id="431" Count="0" />
       <LineId Id="418" Count="0" />
+      <LineId Id="429" Count="0" />
+      <LineId Id="432" Count="0" />
+      <LineId Id="430" Count="0" />
+      <LineId Id="433" Count="0" />
+      <LineId Id="435" Count="1" />
+      <LineId Id="434" Count="0" />
+      <LineId Id="437" Count="1" />
+      <LineId Id="428" Count="0" />
+      <LineId Id="420" Count="1" />
+      <LineId Id="419" Count="0" />
+      <LineId Id="427" Count="0" />
       <LineId Id="88" Count="0" />
       <LineId Id="69" Count="0" />
     </LineIds>

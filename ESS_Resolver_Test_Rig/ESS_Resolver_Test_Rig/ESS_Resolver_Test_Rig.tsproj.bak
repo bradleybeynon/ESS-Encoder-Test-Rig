@@ -2506,6 +2506,23 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.ThermoCoupleChannel_1</Name>
+							<Comment><![CDATA[ Analogue inputs]]></Comment>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ThermoCoupleChannel_2</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ThermoCoupleChannel_3</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ThermoCoupleChannel_4</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
 							<Name>.stAxis_1.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
@@ -2676,23 +2693,6 @@ External Setpoint Generation:
 3: axis is a slave axis
 ]]></Comment>
 							</SubVar>
-						</Var>
-						<Var>
-							<Name>MAIN.ThermoCoupleChannel_1</Name>
-							<Comment><![CDATA[ Analogue inputs]]></Comment>
-							<Type>REAL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.ThermoCoupleChannel_2</Name>
-							<Type>REAL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.ThermoCoupleChannel_3</Name>
-							<Type>REAL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.ThermoCoupleChannel_4</Name>
-							<Type>REAL</Type>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="2">
