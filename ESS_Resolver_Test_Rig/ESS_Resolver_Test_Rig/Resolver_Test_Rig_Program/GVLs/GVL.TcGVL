@@ -1,12 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <GVL Name="GVL" Id="{ae16aa83-5e48-4609-bd62-bae9f5908323}">
-    <Declaration><![CDATA[{attribute 'qualified_only'}
+    <Declaration><![CDATA[{attribute 'Tc2GvlVarNames'}
+VAR_GLOBAL CONSTANT
+	
+
+	MAX_CSV_ROWS             : UDINT := 1;
+    MAX_CSV_COLUMNS         : UDINT := 12;
+    MAX_CSV_FIELD_LENGTH    : UDINT := 100;
+   
+    DATA_CSV_HEADERS        : ARRAY[0..MAX_CSV_COLUMNS] OF STRING(MAX_CSV_FIELD_LENGTH) :=[ (* Source PLC database *)
+    'MeasurementID',
+    'TestState',
+    'AxisPosition',
+    'CurrentCycle',
+    'PositalPosition',
+    'KublerPosition',
+    'AMOPosition',
+    'ThermoCouple_1',
+    'ThermoCouple_2',
+    'ThermoCouple_3',
+    'ThermoCouple_4',  
+    'UnixTime']; 
+
+END_VAR 
 VAR_GLOBAL
 		stAxis_1 : AXIS_REF;
 		stAxis_2 : AXIS_REF;
 		stAxis_3 : AXIS_REF;
 		stAxis_4 : AXIS_REF;
-END_VAR]]></Declaration>
+		
+
+END_VAR
+
+
+]]></Declaration>
   </GVL>
 </TcPlcObject>

@@ -66,8 +66,10 @@ VAR_INPUT
 	LimitSwitchInput_1 AT %I* : BOOL;
 	LimitSwitchInput_2 AT %I* : BOOL;
 			// Analogue inputs
-	ThermoCoupleChanne_1 AT %I*: REAL;
-	ThermoCoupleChanne_2 AT %I*: REAL;
+	ThermoCoupleChannel_1 AT %I*: REAL;
+	ThermoCoupleChannel_2 AT %I*: REAL;
+	ThermoCoupleChannel_3 AT %I*: REAL;
+	ThermoCoupleChannel_4 AT %I*: REAL;
 END_VAR
 
 VAR_OUTPUT
@@ -102,9 +104,9 @@ bRelMove := FALSE;
 
 //mcHome_1(Axis := GVL.stAxis_1, Execute := bHomeAxis_1, Position := fHomePosition);
 
-
 Test_Routine();
- 
+
+P_CSVWriter(     bNewData            :=    TRUE); 
 ]]></ST>
     </Implementation>
     <Action Name="Limit_Switch" Id="{b3b7bac8-26ca-4866-bea2-1a68ac32b6f9}">
@@ -147,11 +149,12 @@ CASE iState OF
 		iState := 10;
 	10: 
 		IF bStartTest THEN
+			P_CSVWriter(bOpen:=TRUE);
 			iState := 20;
 		END_IF
 	
 	20:
-	
+		
 		mcMoveAbsTest_1.Execute := TRUE;
 		IF mcMoveAbsTest_1.Done THEN
 			bStartReturnTimer := TRUE;
@@ -193,6 +196,7 @@ CASE iState OF
 	
 	90: bStartTest := FALSE;
 		bFinishTest := TRUE;
+		P_CSVWriter(bClose   :=  TRUE);
 		iState := 10;
 	
 ELSE
@@ -202,13 +206,13 @@ END_CASE]]></ST>
     </Action>
     <Action Name="Thermo_Couple" Id="{3a8aed03-d895-41ec-a963-8fc2b1e6ee52}">
       <Implementation>
-        <ST><![CDATA[IF ThermoCoupleChanne_1 > 40 THEN
+        <ST><![CDATA[IF ThermoCoupleChannel_1 > 40 THEN
 	bEnableAxis_1 := FALSE ;
 		
 	
 END_IF
 
-IF ThermoCoupleChanne_2 > 40 THEN
+IF ThermoCoupleChannel_2 > 40 THEN
 	bEnableAxis_1 := FALSE ;
 		
 	
@@ -230,8 +234,8 @@ END_IF
       <LineId Id="87" Count="0" />
       <LineId Id="70" Count="0" />
       <LineId Id="184" Count="0" />
-      <LineId Id="126" Count="0" />
       <LineId Id="125" Count="0" />
+      <LineId Id="418" Count="0" />
       <LineId Id="88" Count="0" />
       <LineId Id="69" Count="0" />
     </LineIds>
@@ -256,6 +260,7 @@ END_IF
       <LineId Id="93" Count="1" />
       <LineId Id="2" Count="5" />
       <LineId Id="20" Count="0" />
+      <LineId Id="95" Count="0" />
       <LineId Id="69" Count="0" />
       <LineId Id="22" Count="0" />
       <LineId Id="8" Count="0" />
@@ -292,7 +297,9 @@ END_IF
       <LineId Id="66" Count="0" />
       <LineId Id="65" Count="0" />
       <LineId Id="68" Count="0" />
-      <LineId Id="40" Count="1" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="96" Count="0" />
+      <LineId Id="41" Count="0" />
       <LineId Id="37" Count="0" />
       <LineId Id="11" Count="1" />
       <LineId Id="1" Count="0" />
