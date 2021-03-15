@@ -1,0 +1,483 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="P_CSVWriter" Id="{f0d51392-411f-44ee-81c3-b0b8ae57ff7f}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM P_CSVWriter
+(* Writing of CSV file in text mode. None of the field value is containing any non-printing control characters like line feed, carriage return, quotation marks, semicolon... *)
+VAR
+	
+	bBusy			: BOOL := TRUE;
+	
+	
+	sNetId			: T_AmsNetId := '';	(* TwinCAT system network address *)
+	sFileName		: T_MaxString := 'C:\ShutterTestData\';(* CSV destination file path and name *)
+	sCSVLine		: T_MaxString := '';(* Single CSV text line (row, record), we are using string as record buffer (your are able to see created fields) *)
+	
+	
+	nErrId			: UDINT;
+	
+	//File management fucntion blocks and variables
+	fbWriter		: FB_CSVMemBufferWriter;(* Helper function block used to create CSV data bytes (single record line) *)
+	hFile			: UINT		:= 0;(* File handle of the source file *)
+	step			: DWORD 	:= 0;
+	fbFileOpen		: FB_FileOpen;(* Opens file *)
+	fbFileClose		: FB_FileClose;(* Closes file *)
+	fbFilePuts		: FB_FilePuts;(* Writes one record (line) *)
+	
+	//UnixTimestamp function block
+	unixTime: UnixTimestamp;
+    timestampMilliseconds: ULINT;
+	
+	//State Mechine
+	dataWriterState 		: DUT_fileWriterStates := DUT_fileWriterStates.idle;
+	
+	//Timer for when to save
+	saveIntervalTimer		: TON;
+	
+END_VAR
+VAR_INPUT
+	//test data//
+	testShutterData : ST_shutterData;
+	
+	bNewData		: BOOL := FALSE;	(* Rising edge starts data saving*)
+	bOpen			: BOOL := FALSE;	(* Rising edge starts program execution *)
+	bClose			: BOOL := FALSE;	(* Rising edge ends program execution *)
+	
+	
+	saveInterval	: TIME := T#100MS;
+	
+	stimeString		: T_MaxString;
+END_VAR
+VAR_OUTPUT
+	//Error flag for troubleshooting
+	bError			: BOOL;
+	
+	//Mesurement ID 
+	nMeasurementID	: INT := 0;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE dataWriterState OF
+	DUT_fileWriterStates.idle:	(* Wait for rising edge at bOpen variable *)
+		nMeasurementID := 0;
+		
+		
+		//Check of rising edge on open boolean
+		IF bOpen THEN
+			dataWriterState := DUT_fileWriterStates.opening;
+		END_IF
+		
+		//"Opening State" initalisation code
+		//reset variables (incase the PLC has not been reset
+		IF dataWriterState = DUT_fileWriterStates.opening THEN
+			bOpen 					:= FALSE;
+			bClose					:= FALSE;
+			
+			bBusy					:= TRUE;
+			bError					:= FALSE;
+			nErrId					:= 0;
+			hFile					:= 0;
+			
+			//Set the seperator to be a comma
+			DEFAULT_CSV_FIELD_SEP := 16#2C;
+			
+			//start opening file
+			OpenFile();
+		END_IF
+	
+	//Stay this state until file has been opened
+	DUT_fileWriterStates.opening:	(* Wait until open not busy *)
+		nMeasurementID := 0;
+		//Check if the file opening has been complete
+		IF CheckIfOpened() THEN			
+			dataWriterState := DUT_fileWriterStates.saving;(* Write record to the file *)
+		END_IF
+		
+		
+		
+		//If state has been changed to saving, the headers for the data are applied to the top of the CSV
+		IF dataWriterState = DUT_fileWriterStates.saving THEN
+			WriteCSVLine(StringArrayToCSVString(DATA_CSV_HEADERS));	
+		END_IF
+	
+	//Save data until rising edge on bclose variables
+	DUT_fileWriterStates.saving: 
+		(* Wait for rising edge at bNewData variable *)
+		saveIntervalTimer(IN := TRUE, PT := saveInterval);
+		IF bNewData AND saveIntervalTimer.Q THEN
+			//reset save interval timer
+			saveIntervalTimer(IN := FALSE);
+			//save and increment measurement ID
+			testShutterData.MeasurementID := nMeasurementID;
+			nMeasurementID := nMeasurementID + 1;
+			//Write shuitter data to CSV
+			WriteCSVLine(shutterDataToCSVString(testShutterData));
+			bNewData := FALSE;
+		END_IF
+		
+		(* Wait for rising edge at bClose variable *)
+		IF bClose THEN
+			dataWriterState := DUT_fileWriterStates.closing;
+		END_IF
+		//Close the file before moving onto the closing state
+		IF dataWriterState = DUT_fileWriterStates.closing THEN
+			bClose := FALSE; 
+			CloseFile();
+			
+			//reset measurement ID
+			nMeasurementID:= 0;
+		END_IF
+		
+	DUT_fileWriterStates.closing:	(* Close source file *)
+		IF CheckIfClosed() THEN
+			dataWriterState := DUT_fileWriterStates.idle;	(* Ready *)
+		END_IF
+		
+		
+	DUT_fileWriterStates.error: (* Error detected TODO:  *)
+		bError := TRUE;
+END_CASE
+
+//Check if an error has occured
+IF bError THEN
+	dataWriterState := DUT_fileWriterStates.error;
+END_IF
+
+
+
+]]></ST>
+    </Implementation>
+    <Method Name="CheckIfClosed" Id="{535d8999-cc0d-4c8e-887a-4cac4158df3d}">
+      <Declaration><![CDATA[METHOD CheckIfClosed : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbFileClose( bExecute := FALSE, bError => bError, nErrID => nErrID );
+IF ( NOT fbFileClose.bBusy ) THEN
+			hFile := 0;
+			CheckIfClosed := TRUE;
+ELSE
+				
+			CheckIfClosed := FALSE;
+			
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CheckIfOpened" Id="{b6b8cf71-9e09-484c-8b20-28d1d7e089d2}">
+      <Declaration><![CDATA[METHOD CheckIfOpened : BOOL
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+	errorOpening : BOOL := FALSE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbFileOpen( bExecute := FALSE, bError => bError, nErrID => nErrID, hFile => hFile );
+IF NOT fbFileOpen.bBusy THEN
+	IF NOT fbFileOpen.bError THEN
+		CheckIfOpened := TRUE;
+	ELSE(* Error: file not found? *)
+		errorOpening := TRUE;
+	END_IF
+ELSE
+	CheckIfOpened := FALSE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CloseFile" Id="{1df80b97-f756-440c-be85-6a954aeae398}">
+      <Declaration><![CDATA[METHOD CloseFile : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbFileClose( bExecute := FALSE );
+fbFileClose( sNetId := sNetId, hFile := hFile, bExecute := TRUE );]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OpenFile" Id="{c7a73a2f-1fac-4e5a-8060-e19531f9631a}">
+      <Declaration><![CDATA[METHOD OpenFile : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	fbCreateDir	: FB_CreateDir;	
+
+
+	newPath : STRING(255);
+	newPath2: STRING(255);
+	sCSV	: STRING(255) := '.csv';
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//create directory
+fbCreateDir(bExecute := FALSE);
+fbCreateDir(
+		sNetId := '',
+		sPathName := sFileName,
+		ePath  := PATH_GENERIC,
+		bExecute := TRUE,
+		tTimeout := DEFAULT_ADS_TIMEOUT);
+		
+//open file
+fbFileOpen(  bExecute := FALSE  );
+
+stimeString := REPLACE(stimeString,'.',1,5);
+stimeString := REPLACE(stimeString,'.',1,8);
+stimeString := REPLACE(stimeString,'.',1,11);
+stimeString := REPLACE(stimeString,'.',1,14);
+stimeString := REPLACE(stimeString,'.',1,17);
+newPath := CONCAT(sFileName,stimeString);
+newPath2:= CONCAT(newPath,sCSV);
+
+fbFileOpen( 	sNetId := sNetId, 
+				sPathName := newPath2, 
+				nMode := FOPEN_MODEWRITE OR FOPEN_MODETEXT,(* Open file in TEXT mode! *)
+				ePath := PATH_GENERIC,
+				bExecute := TRUE );]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="shutterDataToCSVString" Id="{ecb5c23a-6a85-4505-b479-d0167bac67af}">
+      <Declaration><![CDATA[METHOD shutterDataToCSVString : T_MaxString
+VAR_INPUT
+	inputShutterData : ST_shutterData;
+END_VAR
+
+VAR_OUTPUT
+	tempArray	: ARRAY[0..MAX_CSV_COLUMNS] OF STRING(MAX_CSV_FIELD_LENGTH);
+END_VAR
+
+VAR
+	
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+tempArray := shutterDataToStringArray(inputShutterData);
+shutterDataToCSVString := StringArrayToCSVString(tempArray);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="shutterDataToStringArray" Id="{6adf8559-6e38-422f-8bf0-f82a29ded375}">
+      <Declaration><![CDATA[METHOD shutterDataToStringArray :  ARRAY[0..MAX_CSV_COLUMNS] OF STRING(MAX_CSV_FIELD_LENGTH);
+VAR_INPUT
+	inputShutterData : ST_shutterData;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[shutterDataToStringArray[0] := INT_TO_STRING(inputShutterData.MeasurementID);
+shutterDataToStringArray[1] := TO_STRING(inputShutterData.testState);
+shutterDataToStringArray[2] := BOOL_TO_STRING(inputShutterData.PneumaticValve);
+shutterDataToStringArray[3] := BOOL_TO_STRING(inputShutterData.ErrorSwitch);
+shutterDataToStringArray[4] := BOOL_TO_STRING(inputShutterData.ContractionSwitch);
+shutterDataToStringArray[5] := BOOL_TO_STRING(inputShutterData.ExtensionSwitch);
+shutterDataToStringArray[6] := REAL_TO_STRING(inputShutterData.SystemPessure);
+shutterDataToStringArray[7] := REAL_TO_STRING(inputShutterData.DTI[0]);
+shutterDataToStringArray[8] := REAL_TO_STRING(inputShutterData.DTI[1]);
+shutterDataToStringArray[9] := REAL_TO_STRING(inputShutterData.DTI[2]);
+shutterDataToStringArray[10] := REAL_TO_STRING(inputShutterData.DTI[3]);
+shutterDataToStringArray[11] := REAL_TO_STRING(inputShutterData.DTI[4]);
+shutterDataToStringArray[12] := REAL_TO_STRING(inputShutterData.DTI[5]);;
+shutterDataToStringArray[13] := ULINT_TO_STRING(inputShutterData.UnixTime);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="StringArrayToCSVString" Id="{2d609d44-2071-4544-be42-8cdf42dbe0e9}">
+      <Declaration><![CDATA[METHOD StringArrayToCSVString : T_MaxString
+VAR_INPUT
+	inputArray	: ARRAY[0..MAX_CSV_COLUMNS] OF STRING(MAX_CSV_FIELD_LENGTH);
+END_VAR
+VAR_OUTPUT
+	
+END_VAR
+VAR
+	nColumn		: UDINT 	:= 0;(* Column number (record field) *)
+	sCSVField		: T_MaxString := '';(* Single CSV field value (column, record field) *)
+	tempString		: T_MaxString := '';
+	
+	
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+FOR nColumn := 0 TO MAX_CSV_COLUMNS BY 1 DO
+
+	sCSVField := STRING_TO_CSVFIELD( inputArray[ nColumn ], FALSE );(* TODO: Get field value from your application *)
+
+				(* Add new field to the record buffer *)
+	fbWriter( 	pBuffer := ADR( tempString ), cbBuffer := SIZEOF( tempString ) - 1, putValue := sCSVField, pValue := 0, cbValue := 0,
+				bCRLF := ( nColumn = MAX_CSV_COLUMNS ) );(* bCRLF == TRUE => Write CRLF after the last field value *)
+	IF fbWriter.bOk THEN
+		fbWriter.eCmd := eEnumCmd_Next;(* Write next field value *)
+	END_IF
+
+END_FOR(* FOR nColumn := 0... *)
+
+(* FB_FilePuts adds allready CR (carriage return) to the written line.
+We have to replace the $R$L characters with $L character to avoid double CR. *)
+IF RIGHT( tempString, 2 ) = '$R$L' THEN
+	tempString := REPLACE( tempString, '$L', 2, LEN(tempString  ) - 1 );
+END_IF
+
+StringArrayToCSVString := tempString;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WriteCSVLine" Id="{473de7bc-814c-4919-8b81-511a6ac3aa38}">
+      <Declaration><![CDATA[METHOD WriteCSVLine : BOOL
+VAR_INPUT
+	newSCVLine : T_MAXSTRING;
+END_VAR
+VAR
+	canSave		: BOOL :=FALSE;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbFilePuts( bExecute := FALSE, bError => bError, nErrID => nErrID );
+IF NOT fbFilePuts.bBusy THEN
+	IF NOT fbFilePuts.bError THEN
+		canSave := TRUE;
+	ELSE(* Error *)
+		//dataWriterState := DUT_fileWriterStates.error;
+	END_IF
+END_IF
+
+
+IF canSave THEN
+			fbWriter.eCmd := eEnumCmd_First;
+			fbFilePuts( bExecute := FALSE );
+			fbFilePuts( sNetId := sNetId, hFile := hFile, sLine := newSCVLine, bExecute := TRUE );
+			//dataWriterState := DUT_fileWriterStates.saving;(* Write record to the file *)
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="P_CSVWriter">
+      <LineId Id="29" Count="1" />
+      <LineId Id="178" Count="0" />
+      <LineId Id="389" Count="0" />
+      <LineId Id="274" Count="1" />
+      <LineId Id="194" Count="2" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="368" Count="0" />
+      <LineId Id="367" Count="0" />
+      <LineId Id="31" Count="1" />
+      <LineId Id="360" Count="1" />
+      <LineId Id="407" Count="0" />
+      <LineId Id="34" Count="2" />
+      <LineId Id="404" Count="0" />
+      <LineId Id="406" Count="0" />
+      <LineId Id="405" Count="0" />
+      <LineId Id="181" Count="0" />
+      <LineId Id="183" Count="1" />
+      <LineId Id="40" Count="1" />
+      <LineId Id="369" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="379" Count="0" />
+      <LineId Id="185" Count="0" />
+      <LineId Id="237" Count="0" />
+      <LineId Id="187" Count="0" />
+      <LineId Id="359" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="222" Count="0" />
+      <LineId Id="381" Count="0" />
+      <LineId Id="376" Count="1" />
+      <LineId Id="374" Count="1" />
+      <LineId Id="382" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="364" Count="0" />
+      <LineId Id="496" Count="0" />
+      <LineId Id="450" Count="0" />
+      <LineId Id="449" Count="0" />
+      <LineId Id="497" Count="0" />
+      <LineId Id="605" Count="0" />
+      <LineId Id="498" Count="0" />
+      <LineId Id="604" Count="0" />
+      <LineId Id="400" Count="0" />
+      <LineId Id="315" Count="0" />
+      <LineId Id="318" Count="0" />
+      <LineId Id="317" Count="0" />
+      <LineId Id="383" Count="0" />
+      <LineId Id="244" Count="0" />
+      <LineId Id="228" Count="0" />
+      <LineId Id="231" Count="0" />
+      <LineId Id="230" Count="0" />
+      <LineId Id="384" Count="2" />
+      <LineId Id="388" Count="0" />
+      <LineId Id="606" Count="0" />
+      <LineId Id="608" Count="0" />
+      <LineId Id="607" Count="0" />
+      <LineId Id="387" Count="0" />
+      <LineId Id="106" Count="1" />
+      <LineId Id="191" Count="0" />
+      <LineId Id="193" Count="0" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="168" Count="0" />
+      <LineId Id="118" Count="1" />
+      <LineId Id="125" Count="0" />
+      <LineId Id="127" Count="0" />
+      <LineId Id="549" Count="3" />
+      <LineId Id="548" Count="0" />
+      <LineId Id="128" Count="3" />
+    </LineIds>
+    <LineIds Name="P_CSVWriter.CheckIfClosed">
+      <LineId Id="6" Count="3" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="10" Count="0" />
+    </LineIds>
+    <LineIds Name="P_CSVWriter.CheckIfOpened">
+      <LineId Id="6" Count="6" />
+      <LineId Id="16" Count="1" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="15" Count="0" />
+    </LineIds>
+    <LineIds Name="P_CSVWriter.CloseFile">
+      <LineId Id="6" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="P_CSVWriter.OpenFile">
+      <LineId Id="28" Count="1" />
+      <LineId Id="34" Count="1" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="38" Count="2" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="24" Count="1" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="13" Count="0" />
+    </LineIds>
+    <LineIds Name="P_CSVWriter.shutterDataToCSVString">
+      <LineId Id="45" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="22" Count="0" />
+    </LineIds>
+    <LineIds Name="P_CSVWriter.shutterDataToStringArray">
+      <LineId Id="7" Count="1" />
+      <LineId Id="18" Count="1" />
+      <LineId Id="10" Count="3" />
+      <LineId Id="24" Count="4" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="P_CSVWriter.StringArrayToCSVString">
+      <LineId Id="35" Count="0" />
+      <LineId Id="12" Count="16" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="29" Count="0" />
+    </LineIds>
+    <LineIds Name="P_CSVWriter.WriteCSVLine">
+      <LineId Id="19" Count="6" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="17" Count="1" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="7" Count="1" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

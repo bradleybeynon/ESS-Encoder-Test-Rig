@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <DUT Name="ST_EncoderCSVData" Id="{772c714f-9b50-45e7-aee9-4ab3e155f1c8}">
+    <Declaration><![CDATA[TYPE ST_EncoderCSVData :
+STRUCT
+	MeasurementID           : INT;
+    testState               : INT;
+    AxisPosition            : LREAL;
+    CurrentCycle            : WORD;
+    PositalPosition         : LREAL;
+    KublerPosition          : LREAL;
+    AMOPosition             : REAL;
+    ThermoCouple            : ARRAY[0..3] OF DINT;
+    UnixTime                : ULINT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

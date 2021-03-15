@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <DUT Name="DUT_fileWriterStates" Id="{8343bb52-0a4c-4c53-8a6b-f15aa1a58f1b}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE DUT_fileWriterStates :
+(
+	
+    idle := 0,
+    opening,
+    saving,
+    closing,
+    error
+
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

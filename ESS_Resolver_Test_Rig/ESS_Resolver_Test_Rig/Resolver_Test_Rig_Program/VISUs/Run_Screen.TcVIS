@@ -929,7 +929,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"%.2f mm"</v>
+                      <v n="Value">"%.3f mm"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -941,7 +941,7 @@
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"618"</v>
+                      <v n="Value">"31"</v>
                     </o>
                   </l>
                 </o>
@@ -2576,7 +2576,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"%.2f mm"</v>
+                      <v n="Value">"%.3f mm"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -2584,11 +2584,11 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"GVL.stAxis_3.NcToPlc.SetPos"</v>
+                      <v n="Value">"stAxis_3.NcToPlc.ActPos"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"618"</v>
+                      <v n="Value">"31"</v>
                     </o>
                   </l>
                 </o>
@@ -2745,7 +2745,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"%.2f mm"</v>
+                      <v n="Value">"%.3f mm"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -2753,11 +2753,11 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"GVL.stAxis_1.NcToPlc.SetPos"</v>
+                      <v n="Value">"stAxis_4.NcToPlc.ActPos"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"618"</v>
+                      <v n="Value">"31"</v>
                     </o>
                   </l>
                 </o>
@@ -2914,7 +2914,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"%.2f mm"</v>
+                      <v n="Value">"%.3f mm"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -2922,11 +2922,11 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"GVL.stAxis_2.NcToPlc.SetPos"</v>
+                      <v n="Value">"stAxis_2.NcToPlc.ActPos"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"618"</v>
+                      <v n="Value">"31"</v>
                     </o>
                   </l>
                 </o>

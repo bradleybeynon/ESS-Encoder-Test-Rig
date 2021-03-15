@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <DUT Name="ST_shutterData" Id="{ba45fbd4-c1a1-4434-80c6-7100e784ccc2}">
+    <Declaration><![CDATA[
+///IMPORTANT
+///If new variable is added to data here
+///1) Change the global variables for column length and header value
+///2) Change "shutter data to CSV string"
+
+TYPE ST_shutterData :
+STRUCT
+	MeasurementID			: INT;
+	testState				: DUT_testState;
+	PneumaticValve			: BOOL;
+	ErrorSwitch				: BOOL;
+	ContractionSwitch		: BOOL;
+	ExtensionSwitch			: BOOL;
+	SystemPessure			: REAL;
+	DTI						: ARRAY[0..5] OF REAL;
+	UnixTime				: ULINT;
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -71,10 +71,10 @@ VAR_INPUT
 	LimitSwitchInput_1 AT %I* : BOOL;
 	LimitSwitchInput_2 AT %I* : BOOL;
 			// Analogue inputs
-	ThermoCoupleChannel_1 AT %I*: REAL;
-	ThermoCoupleChannel_2 AT %I*: REAL;
-	ThermoCoupleChannel_3 AT %I*: REAL;
-	ThermoCoupleChannel_4 AT %I*: REAL;
+	ThermoCoupleChannel_1 AT %I*: DINT;
+	ThermoCoupleChannel_2 AT %I*: DINT;
+	ThermoCoupleChannel_3 AT %I*: DINT;
+	ThermoCoupleChannel_4 AT %I*: DINT;
 END_VAR
 
 VAR_OUTPUT
@@ -85,6 +85,7 @@ VAR_OUTPUT
 	LimitSwitchOutput_2 AT %Q* : BOOL;
 	EncoderPowerOutput_3 AT %Q* : BOOL;
 	EncoderPowerOutput_6 AT %Q* : BOOL;
+	EncoderPowerOutput_4 AT %Q* : BOOL;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[heartbeat := heartbeat + 1;
@@ -92,6 +93,8 @@ END_VAR]]></Declaration>
 Limit_Switch();
 EncoderPowerOutput_3 := TRUE;
 EncoderPowerOutput_6 := TRUE;
+EncoderPowerOutput_4 := TRUE;
+
 
 mcStop(Axis := GVL.stAxis_1, Execute := bStop,);
 
@@ -152,7 +155,7 @@ END_IF
     </Action>
     <Action Name="Test_Routine" Id="{63bc1eb6-c2bb-4839-87a7-c55c6bea2977}">
       <Implementation>
-        <ST><![CDATA[mcMoveAbsTest_1(Axis := GVL.stAxis_1, Position := 10, Velocity := fAxisVelocity, Acceleration := fAxisAcceleration, Deceleration := fAxisAcceleration);	
+        <ST><![CDATA[mcMoveAbsTest_1(Axis := GVL.stAxis_1, Position := 40, Velocity := fAxisVelocity, Acceleration := fAxisAcceleration, Deceleration := fAxisAcceleration);	
 mcMoveAbsTest_1.Execute := FALSE;
 fbReturnTimer( IN := bStartReturnTimer, PT := fReturnTime);	
 mcMoveAbsTestReturn_1(Axis := GVL.stAxis_1, Position := 0, Velocity := fAxisVelocity, Acceleration := fAxisAcceleration, Deceleration := fAxisAcceleration);
@@ -226,17 +229,17 @@ END_CASE]]></ST>
     </Action>
     <Action Name="Thermo_Couple" Id="{3a8aed03-d895-41ec-a963-8fc2b1e6ee52}">
       <Implementation>
-        <ST><![CDATA[IF ThermoCoupleChannel_1 > 40 THEN
+        <ST><![CDATA[IF ThermoCoupleChannel_1 > 5000 THEN 
 	bEnableAxis_1 := FALSE ;
 		
 	
 END_IF
 
-IF ThermoCoupleChannel_2 > 40 THEN
-	bEnableAxis_1 := FALSE ;
+//IF ThermoCoupleChannel_2 > 40 THEN
+	//bEnableAxis_1 := FALSE ;
 		
 	
-END_IF
+//END_IF
 ]]></ST>
       </Implementation>
     </Action>
@@ -245,7 +248,10 @@ END_IF
       <LineId Id="260" Count="0" />
       <LineId Id="262" Count="0" />
       <LineId Id="259" Count="0" />
-      <LineId Id="337" Count="1" />
+      <LineId Id="337" Count="0" />
+      <LineId Id="523" Count="0" />
+      <LineId Id="338" Count="0" />
+      <LineId Id="524" Count="0" />
       <LineId Id="84" Count="1" />
       <LineId Id="21" Count="7" />
       <LineId Id="45" Count="0" />
